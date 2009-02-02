@@ -30,7 +30,7 @@ import Text.PrettyPrint.HughesPJ
 import System.IO ( hFlush, stdout )
 import System.Directory
 import Data.Char
-import Codec.Binary.UTF8.String (encodeString, decodeString)
+import Codec.Binary.UTF8.String (encodeString)
 import Haskal.TypeOf ( typeOf_ )
 
 import Haskal.Path ( (</>), expand )
