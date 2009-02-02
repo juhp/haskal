@@ -3,14 +3,20 @@ haskal is the haskell shell.
 here is a basic configuration file for
 the shell:
 
-   config = defaultConfig
-      { prompt   = mkPrompt [ user, at, host, ConfigAPI.colon
-                            , currentDir, rangle ]
+    {-# LANGUAGE NoMonomorphismRestriction #-}
+    module Config (config) where
+    import Haskal.ConfigAPI as API
+    import Text.PrettyPrint.HughesPJ as PP
+    
+    config :: Config
+    config = defaultConfig
+      { prompt   = mkPrompt [ user, at, host, API.colon
+                            , currentDir, API.rangle, s' ]
       , dir      = "~/.haskal"
       , verbose  = False
-      }
+      } where s' = return $ PP.text " "
 
-Put this in ~/.haskal/Config.hs and run haskal.
+Put this in ~/.haskal/Config.hs and run `haskal'.
 
 see src/Haskal/ConfigAPI.hs for available features. the
 file src/config_stub includes the basic stub that is
