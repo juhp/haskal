@@ -30,6 +30,7 @@ import Text.PrettyPrint.HughesPJ
 import System.IO ( hFlush, stdout )
 import System.Directory
 import Data.Char
+import Codec.Binary.UTF8.String (encodeString, decodeString)
 import Haskal.TypeOf ( typeOf_ )
 
 import Haskal.Path ( (</>), expand )
@@ -106,8 +107,8 @@ rehash = do
 
 mainLoop :: MainM ()
 mainLoop = do
-  cfg <- reconfigure
-  line <- io (Config.prompt cfg >>= RL.readline . show)
+  cfg  <- reconfigure
+  line <- io (Config.prompt cfg >>= RL.readline . encodeString . show)
   case line of
     Nothing        -> do
       return ()

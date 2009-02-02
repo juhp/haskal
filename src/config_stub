@@ -1,6 +1,0 @@
-module Configuration (config) where
-import Haskal.ConfigAPI as ConfigAPI
-import Text.PrettyPrint.HughesPJ as HughesPJ
-
-config :: Config
-config = defaultConfig

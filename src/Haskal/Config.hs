@@ -34,9 +34,6 @@ import System.Exit
 import Haskal.ConfigAPI
 import Haskal.Path ( expand, (</>) )
 
-import Paths_haskal ( getDataFileName )
-
-
 options :: [OptDescr (Config -> IO Config)]
 options = 
   [ Option "v" ["verbose"] (NoArg setVerbose) "verbose mode"
@@ -54,14 +51,13 @@ options =
 
 loadOrReload
   :: String            -- ^ The haskell source file.
-  -> String            -- ^ Stub file to make With.
   -> [String]          -- ^ Arguments to make.
   -> [String]          -- ^ Includes to load.
   -> String            -- ^ The symbol to load.
   -> Maybe (Module, a) -- ^ Previously loaded module.
   -> IO (Module, a)
-loadOrReload file stub args incls sym mInfo = do
-  ms <- makeWith file stub args
+loadOrReload file args incls sym mInfo = do
+  ms <- makeAll file args
   case (ms, mInfo) of
     (MakeFailure es, _                   ) -> mapM_ putStrLn es >> exitFailure
     (MakeSuccess ReComp _obj, Just (m, _)) -> reload m sym >>= loadStat
@@ -73,8 +69,8 @@ loadOrReload file stub args incls sym mInfo = do
 
 configuration :: Maybe (Module, Config) -> IO (Module, Config)
 configuration mCfg = do
-  (configFile, configStub) <- createFiles
-  (m, cfg) <- loadOrReload configFile configStub ["-package haskal"]
+  configFile <- mkCFile
+  (m, cfg) <- loadOrReload configFile ["-package haskal"]
                            [] "config" mCfg
   cfg' <- expand (dir cfg) >>= \dir' -> return $ cfg { dir = dir' }
   (opts, _nonOpts, errs) <- liftM (getOpt Permute options) getArgs
@@ -85,11 +81,10 @@ configuration mCfg = do
       print (usageInfo "USAGE:" options)
       exitFailure
 
-createFiles :: IO (String, String)
-createFiles = do
+mkCFile :: IO String
+mkCFile = do
   cfgDir  <- expand $ dir defaultConfig
-  cfgStub <- getDataFileName ("src" </> "config_stub")
   let cfgFile = cfgDir </> "Config.hs"
   Ex.catch (createDirectory cfgDir) (\(_::SomeException) -> return ())
   openFile cfgFile AppendMode >>= hClose
-  return (cfgFile, cfgStub)
+  return cfgFile

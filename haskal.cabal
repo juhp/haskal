@@ -5,7 +5,6 @@ license-file:        COPYING
 tested-with:         GHC == 6.10.1
 Author:              Mats Jansborg and Aleksandar Despotoski
 maintainer:          Austin Seipp <mad.one@gmail.com>
-data-files:          src/config_stub
 cabal-version:       >= 1.2
 build-type:          Simple
 
@@ -27,4 +26,4 @@ executable haskal
     extensions:      ForeignFunctionInterface, GeneralizedNewtypeDeriving,
                      DeriveDataTypeable, PatternGuards, ScopedTypeVariables
     build-depends:   base >= 4, unix, plugins >= 1.4, mtl, readline,
-                     pretty, directory, containers
+                     pretty, directory, containers, utf8-string >= 0.3
