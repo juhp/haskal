@@ -1,1 +1,20 @@
 haskal is the haskell shell.
+
+here is a basic configuration file for
+the shell:
+
+   config = defaultConfig
+      { prompt   = mkPrompt [ user, at, host, ConfigAPI.colon
+                            , currentDir, rangle ]
+      , dir      = "~/.haskal"
+      , verbose  = False
+      }
+
+Put this in ~/.haskal/Config.hs and run haskal.
+
+see src/Haskal/ConfigAPI.hs for available features. the
+file src/config_stub includes the basic stub that is
+included in every configuration and it shows the imports
+given to you.
+
+improvements welcome.

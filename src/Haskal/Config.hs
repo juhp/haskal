@@ -87,9 +87,9 @@ configuration mCfg = do
 
 createFiles :: IO (String, String)
 createFiles = do
-  cfgDir <- expand $ dir defaultConfig
+  cfgDir  <- expand $ dir defaultConfig
+  cfgStub <- getDataFileName ("src" </> "config_stub")
   let cfgFile = cfgDir </> "Config.hs"
   Ex.catch (createDirectory cfgDir) (\(_::SomeException) -> return ())
   openFile cfgFile AppendMode >>= hClose
-  cfgStub <- getDataFileName ("src" </> "config_stub")
   return (cfgFile, cfgStub)

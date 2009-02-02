@@ -20,10 +20,12 @@
 -- 02110-1301, USA.
 
 module Haskal.ConfigAPI
-  ( Config ( .. )
+  ( -- * Configuration
+    Config ( .. )
   , defaultConfig
-  , currentDir
+    -- * Defining your prompt
   , mkPrompt
+  , currentDir
   , at
   , colon
   , rangle
