@@ -1,0 +1,30 @@
+name:                haskal
+version:             0.2
+license:             GPL
+license-file:        COPYING
+tested-with:         GHC == 6.10.1
+Author:              Mats Jansborg and Aleksandar Despotoski
+maintainer:          Austin Seipp <mad.one@gmail.com>
+data-files:          src/config_stub
+cabal-version:       >= 1.2
+build-type:          Simple
+
+library
+    hs-source-dirs:  src
+    exposed-modules: Haskal.ConfigAPI
+                     Haskal.ShellImports
+                     Haskal.Marshal
+                     Haskal.Command
+                     Haskal.Util
+    extensions:      MultiParamTypeClasses, FunctionalDependencies,
+                     ExistentialQuantification
+    build-depends:   unix, mtl, pretty, directory
+
+executable haskal
+    ghc-options:     -Wall -Werror -funbox-strict-fields
+    main-is:         Haskal.hs
+    hs-source-dirs:  src
+    extensions:      ForeignFunctionInterface, GeneralizedNewtypeDeriving,
+                     DeriveDataTypeable, PatternGuards, ScopedTypeVariables
+    build-depends:   base >= 4, unix, plugins >= 1.4, mtl, readline,
+                     pretty, directory, containers
