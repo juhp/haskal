@@ -32,7 +32,7 @@ import System.Environment
 import System.Directory
 import Text.PrettyPrint.HughesPJ
 import Data.Char
-import Haskal.Util
+import Data.List.Split (splitWhen)
 import Haskal.Path
 
 data ProgramInfo = ProgramInfo
@@ -43,7 +43,7 @@ data ProgramInfo = ProgramInfo
 
 getExecutables :: IO (Trie.Trie Char ProgramInfo)
 getExecutables =
-  getEnv "PATH" >>= foldM doDir Trie.empty . reverse . split (':'==)
+  getEnv "PATH" >>= foldM doDir Trie.empty . reverse . splitWhen (':'==)
   where
     doDir m dir = (do
       files <-  liftM (zip $ repeat dir) $ getDirectoryContents dir

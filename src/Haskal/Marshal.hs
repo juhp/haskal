@@ -26,7 +26,7 @@ module Haskal.Marshal
 import Data.Char     ( chr, ord )
 import Data.List     ( intersperse )
 import Data.Word     ( Word8 )
-import Haskal.Util   ( split )
+import Data.List.Split ( splitWhen )
 
 class Marshal a where
   marshal       :: a -> ([Word8] -> [Word8])
@@ -35,7 +35,7 @@ class Marshal a where
   unmarshalList :: [Word8] -> [a]
 
   marshalList   = foldr (.) id . intersperse (10:) .  map marshal
-  unmarshalList = map unmarshal . split (10==)
+  unmarshalList = map unmarshal . splitWhen (10==)
 
 instance Marshal a => Marshal [a] where
   marshal   = marshalList

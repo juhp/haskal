@@ -22,14 +22,11 @@
 module Haskal.Util
   ( whenM
   , when_
-  , for
-  , for_
   , swing
   , first
   , second
   , (***)
   , (&&&)
-  , split
   , liftM
   , foldl'
   ) where
@@ -46,20 +43,5 @@ whenM cond action = do
 when_ :: Monad m => Bool -> m a -> m ()
 when_ b m = when b (m >> return ())
 
-for :: Monad m => [a] -> (a -> m b) -> m [b]
-for = flip mapM
-
-for_ :: Monad m => [a] -> (a -> m b) -> m ()
-for_ = flip mapM_
-
 swing :: (((a -> b) -> b) -> c -> d) -> c -> a -> d
 swing f c a = (f ($ a)) c
-
-split :: (a -> Bool) -> [a] -> [[a]]
-split p = filter (not . null) . chop
-  where
-    chop = unfoldr $ \xs -> case xs of
-      []           -> Nothing
-      (y:ys) | p y -> Just $ break p ys
-      ys           -> Just $ break p ys
-

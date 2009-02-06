@@ -26,4 +26,4 @@ executable haskal
     extensions:      ForeignFunctionInterface, GeneralizedNewtypeDeriving,
                      DeriveDataTypeable, PatternGuards, ScopedTypeVariables
     build-depends:   base >= 4, unix, plugins >= 1.4, mtl, readline,
-                     pretty, directory, containers, utf8-string >= 0.3
+                     pretty, directory, containers, utf8-string >= 0.3, split
