@@ -40,7 +40,7 @@ typeOf_ src loadpath mods = do
     status             <- make tmpf ["-i"++head loadpath, "-Onot","-fglasgow-exts","-package","plugins"]
     ty <- case status of
         MakeSuccess _ obj -> do
-            m_v <- load_ obj ([pwd]++loadpath) symbol :: IO (LoadStatus Dynamic)
+            m_v <- load_ obj ([pwd]++loadpath) "resource" :: IO (LoadStatus Dynamic)
             case m_v of
                 LoadFailure _   -> return "<failure>"
                 LoadSuccess _ v -> return $ (init . tail) $ show v
@@ -50,9 +50,9 @@ typeOf_ src loadpath mods = do
     return ty
 
 dynwrap :: String -> String -> [Import] -> String
-dynwrap expr nm mods =
-        "module "++nm++ "( resource ) where\n" ++
-         concatMap (\m-> "import "++m++"\n") mods ++
-        "import AltData.Dynamic\n" ++
-        "resource = let { yhjulwwiefzojcbxybbruweejw = \n" ++
-        "{-# LINE 1 \"<eval>\" #-}\n" ++ expr ++ ";} in toDyn yhjulwwiefzojcbxybbruweejw"
+dynwrap expr nm mods 
+    = unlines [ "module "++nm++ " (resource) where"
+              ,  unlines . map ("import "++) $ mods 
+              , "import Data.Dynamic" 
+              , "resource = let { yhjulwwiefzojcbxybbruweejw = "
+              , "{-# LINE 1 \"<eval>\" #-}\n" ++ expr ++ ";} in toDyn yhjulwwiefzojcbxybbruweejw" ]
